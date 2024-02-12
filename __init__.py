@@ -23,19 +23,32 @@ def mongraphique():
 def mongraphique2():
     return render_template("graphique2.html")
 
+@app.route('/extract-minutes/<date_string>')
+def extract_minutes(date_string):
+    date_object = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+    minutes = date_object.minute
+    return jsonify({'minutes': minutes})
+
 @app.route('/commits/')
-def count_commits():
-    url = 'https://api.github.com/repos/Nanaaicha23/5MCSI_Metriques/commits'
-    response = requests.get(url)
+def get_commits():
+    # Appel à l'API GitHub pour obtenir les données sur les commits
+    response = requests.get('https://api.github.com/repos/Nanaaicha23/5MCSI_Metriques/commits')
     commits_data = response.json()
-
+    
+    # Initialisation du dictionnaire pour stocker les données par minute
     commits_per_minute = {}
+    
+    # Traitement des données pour compter les commits par minute
     for commit in commits_data:
-        date = commit['commit']['author']['date']
-        minute = date.split(':')[1]  # Extraire la minute de l'heure
+        commit_date = datetime.strptime(commit['commit']['author']['date'], '%Y-%m-%dT%H:%M:%SZ')
+        minute = commit_date.minute
         commits_per_minute[minute] = commits_per_minute.get(minute, 0) + 1
+    
+    # Conversion du dictionnaire en liste de tuples pour le graphique
+    commits_list = [{'minute': minute, 'commits': count} for minute, count in commits_per_minute.items()]
+    
+    return jsonify({'commits': commits_list})
 
-    return jsonify(commits_per_minute)
 
 
 
