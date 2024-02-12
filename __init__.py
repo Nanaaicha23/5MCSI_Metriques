@@ -37,8 +37,6 @@ def count_commits():
 
     return jsonify(commits_per_minute)
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
    
