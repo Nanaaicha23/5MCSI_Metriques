@@ -19,7 +19,7 @@ def MaPremiereAPI():
 def mongraphique():
     return render_template("graphique.html")
 
-@app.route("/contact/")
+@app.route("/contactperso/")
 def moncontact():
     return render_template("contact.html")
                                        
