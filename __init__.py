@@ -25,7 +25,7 @@ def mongraphique2():
 
 @app.route('/commits/')
 def count_commits():
-    url = 'https://api.github.com/repos/Nanaaicha23/5MCSI_Metriques/commits'
+    url = 'https://github.com/Nanaaicha23/5MCSI_Metriques/commits'
     response = requests.get(url)
     commits_data = response.json()
 
