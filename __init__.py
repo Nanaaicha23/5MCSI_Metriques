@@ -19,6 +19,10 @@ def MaPremiereAPI():
 def mongraphique():
     return render_template("graphique.html")
 
+@app.route("/histogramme/")
+def mongraphique2():
+    return render_template("graphique2.html")
+
                                        
 @app.route('/paris/')
 def meteo():
