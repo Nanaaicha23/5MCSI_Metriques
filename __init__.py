@@ -38,13 +38,6 @@ def count_commits():
         else:
             commits_per_minute[minute] = 1
 
-    # Convertir les données en format adapté pour Google Charts
-    data_for_chart = [['Minute', 'Nombre de Commits']]
-    for minute, count in commits_per_minute.items():
-        data_for_chart.append([minute, count])
-
-    # Générer le lien vers le graphique
-    chart_url = f'https://chart.googleapis.com/chart?cht=lc&chs=600x300&chd=t:{",".join(str(count) for count in commits_per_minute.values())}&chl={",".join(str(minute) for minute in commits_per_minute.keys())}'
 
     return f"Graphique des commits minute par minute : <img src='{chart_url}' alt='Graphique des commits'>"
 
