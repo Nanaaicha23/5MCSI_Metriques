@@ -13,7 +13,6 @@ def hello_world():
     return render_template('hello.html')   #com2
 @app.route("/contact/")
 def MaPremiereAPI():
-    return "<h2>Ma page de contact</h2>"
     return render_template("contact.html")
 
 @app.route("/rapport/")
