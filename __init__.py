@@ -11,10 +11,11 @@ app = Flask(__name__)
 def MaPremiereAPI():
     return "<h2>Ma page de contact</h2>"
                                                                                                                                        
-
+@app.route("/")
 def hello_world():
     return render_template('hello.html')   #com2
 
+@app.route("/")
 @app.route('/paris/')
 def meteo():
     response = urlopen('https://api.openweathermap.org/data/2.5/forecast/daily?q=Paris,fr&cnt=16&appid=bd5e378503939ddaee76f12ad7a97608')
