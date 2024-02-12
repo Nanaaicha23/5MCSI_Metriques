@@ -18,6 +18,10 @@ def MaPremiereAPI():
 @app.route("/rapport/")
 def mongraphique():
     return render_template("graphique.html")
+
+@app.route("/contact/")
+def moncontact():
+    return render_template("contact.html")
                                        
 @app.route('/paris/')
 def meteo():
