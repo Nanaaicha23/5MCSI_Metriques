@@ -25,17 +25,29 @@ def mongraphique2():
 
 @app.route('/commits/')
 def count_commits():
-    g = Github('24dea890670c4479a6ed789ba58027e6')
-    repo = g.get_repo('Nanaaicha23/5MCSI_Metriques')
-    
+    url = 'https://api.github.com/repos/Nanaaicha23/5MCSI_Metriques/commits'
+    response = requests.get(url)
+    commits_data = response.json()
+
     commits_per_minute = {}
-    for commit in repo.get_commits():
-        commit_date = commit.commit.author.date
-        minute = commit_date.strftime('%M')  # Extraire la minute de l'heure
+    for commit in commits_data:
+        commit_date = commit['commit']['author']['date']
+        minute = datetime.strptime(commit_date, '%Y-%m-%dT%H:%M:%SZ').minute
         if minute in commits_per_minute:
             commits_per_minute[minute] += 1
         else:
             commits_per_minute[minute] = 1
+
+    # Convertir les données en format adapté pour Google Charts
+    data_for_chart = [['Minute', 'Nombre de Commits']]
+    for minute, count in commits_per_minute.items():
+        data_for_chart.append([minute, count])
+
+    # Générer le lien vers le graphique
+    chart_url = f'https://chart.googleapis.com/chart?cht=lc&chs=600x300&chd=t:{",".join(str(count) for count in commits_per_minute.values())}&chl={",".join(str(minute) for minute in commits_per_minute.keys())}'
+
+    return f"Graphique des commits minute par minute : <img src='{chart_url}' alt='Graphique des commits'>"
+
 
    
       
@@ -51,7 +63,6 @@ def meteo():
         temp_day_value = list_element.get('temp', {}).get('day') - 273.15 # Conversion de Kelvin en °c 
         results.append({'Jour': dt_value, 'temp': temp_day_value})
     return jsonify(results=results)
-    return jsonify(commits_per_minute)
-  
+   
 if __name__ == "__main__":
   app.run(debug=True)
