@@ -25,21 +25,20 @@ def mongraphique2():
 
 @app.route('/commits/')
 def count_commits():
-    url = 'https://api.github.com/repos/OpenRSI/5MCSI_Metriques/commits'
-    response = requests.get(url)
-    commits_data = response.json()
-
+    g = Github('24dea890670c4479a6ed789ba58027e6')
+    repo = g.get_repo('Nanaaicha23/5MCSI_Metriques')
+    
     commits_per_minute = {}
-    for commit in commits_data:
-        commit_date = commit['commit']['author']['date']
-        minute = commit_date.split(':')[1][:2]  # Extraire la minute de l'heure
+    for commit in repo.get_commits():
+        commit_date = commit.commit.author.date
+        minute = commit_date.strftime('%M')  # Extraire la minute de l'heure
         if minute in commits_per_minute:
             commits_per_minute[minute] += 1
         else:
             commits_per_minute[minute] = 1
 
-    return jsonify(commits_per_minute)
-
+   
+      
                                        
 @app.route('/paris/')
 def meteo():
@@ -52,6 +51,7 @@ def meteo():
         temp_day_value = list_element.get('temp', {}).get('day') - 273.15 # Conversion de Kelvin en °c 
         results.append({'Jour': dt_value, 'temp': temp_day_value})
     return jsonify(results=results)
+    return jsonify(commits_per_minute)
   
 if __name__ == "__main__":
   app.run(debug=True)
