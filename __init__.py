@@ -23,6 +23,29 @@ def mongraphique():
 def mongraphique2():
     return render_template("graphique2.html")
 
+@app.route('/commits/')
+def count_commits():
+    # Récupérer les données sur les commits depuis l'API GitHub
+    url = 'https://api.github.com/repos/OpenRSI/5MCSI_Metriques/commits'
+    response = requests.get(url)
+    commits_data = response.json()
+    
+    # Compter le nombre de commits par minute
+    commits_per_minute = {}
+    for commit in commits_data:
+        commit_date = commit['commit']['author']['date']
+        minute = datetime.strptime(commit_date, '%Y-%m-%dT%H:%M:%SZ').minute
+        if minute in commits_per_minute:
+            commits_per_minute[minute] += 1
+        else:
+            commits_per_minute[minute] = 1
+    
+    # Convertir les données en format adapté pour Google Charts
+    data_for_chart = [['Minute', 'Nombre de Commits']]
+    for minute, count in commits_per_minute.items():
+        data_for_chart.append([minute, count])
+    
+  
                                        
 @app.route('/paris/')
 def meteo():
